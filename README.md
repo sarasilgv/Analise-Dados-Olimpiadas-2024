@@ -1,6 +1,6 @@
 # 🧸 TOY STORE
 
-#### Notebooks and dashboard with SQL e Power BI.
+#### Notebooks e Dashboard com SQL + Power BI.
 
 Aqui está uma breve apresentação:
 
