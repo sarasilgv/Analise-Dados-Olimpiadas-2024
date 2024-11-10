@@ -1,0 +1,25 @@
+Nomes masculinos:
+
+João
+Pedro
+Lucas
+Miguel
+Gabriel
+Rafael
+Mateus
+Henrique
+Eduardo
+Bruno
+Daniel
+Gustavo
+Felipe
+Nomes femininos:
+
+Maria
+Ana
+Sofia
+Beatriz
+Helena
+Laura
+Júlia
+Alic

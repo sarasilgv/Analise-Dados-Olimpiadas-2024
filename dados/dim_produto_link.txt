@@ -1,0 +1,5 @@
+id_categoria,categoria,link_imagem_categoria
+1,Pelúcia,https://images-americanas.b2w.io/produtos/7415716300/imagens/brinquedo-de-pelucia-adoravel-capivara/7415716318_1_large.jpg
+2,Puzzle,https://static.festapratica.com/public/festapraticabrinquedos/imagens/produtos/brinquedo-quebra-cabeca-duo-baby-puzzle-calesita-655baa491f18f.jpg
+3,Brinquedo,https://m.media-amazon.com/images/I/81MMvPA6JFL.__AC_SX300_SY300_QL70_ML2_.jpghttps://m.media-amazon.com/images/I/81MMvPA6JFL.__AC_SX300_SY300_QL70_ML2_.jpg
+4,Jogo,https://papelariacriativa.com.br/wp-content/uploads/carrinho-brinquedo-infanto-fusca-didtico-baby-car-buggy-538-1.jpg
