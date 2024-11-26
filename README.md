@@ -1,18 +1,25 @@
-# Projeto Analise das Olimpíadas na França 2024
+# Projeto Análise das Olimpíadas na França 2024
 
 Este projeto possui como objetivo analisar os dados obtidos dos jogos olímpicos que aconteceram na França.
 
 
 ## 🛣️ Contexto:
 
-Com essa base de dados com vários detalhes sobre os jogos, atletas, medalhas, entre outro. O comitê Olímpico solicitou um overview a respeito das olimpíadas mas, com um foco na equipe Brasileira.
+Com essa base de dados possui vários detalhes sobre os jogos, atletas, medalhas, entre outros. O comitê Olímpico solicitou um overview a respeito das olimpíadas mas, tendo um foco na equipe Brasileira.
+
+### Descrição das Tabelas 
+
+| TABELAS               | DESCRIÇÃO                                      |
+|-----------------------| -----------------------------------------------|
+|athletes.csv           | Informações pessoais sobre todos os atletas    |
+|coaches.csv            | Informações pessoais sobre todos os treinadores|
 
 
 ## 🚩 Desafios:
 
-- Desempenho brasileiro nos esportes que ganharam medalhas ou quase ganharam
+- Qual foi o desempenho brasileiro nos esportes que ganharam medalhas ou quase ganharam?
 
-- Esportes que temos representantes mas precisamos melhorar o desempenho
+- Quais são os esportes que temos representantes mas precisamos melhorar o desempenho?
 
 - Quantidade de medalhas comparada com a quantidade de medalhas olimpíadas anteriores (qtde e tipo)
 
@@ -22,8 +29,6 @@ Com essa base de dados com vários detalhes sobre os jogos, atletas, medalhas, e
 
 
 ## 📊 Soluções:
-
-
 
 
 
