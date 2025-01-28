@@ -1,152 +1,88 @@
---Desempenho brasileiro nos esportes que ganharam medalhas
-
+-- 1) Qual foi o desempenho brasileiro nos esportes que ganharam medalhas
 
 select 
 	country_code,
 	name,
 	discipline,
 	case 
-		when 
-			gender = 'M' then replace ('M','M','Men')
-		else replace ('W', 'W', 'Women')
-		end as gender_upd,
+		when gender = 'M' then 'Men'
+        else 'Women'
+		end as gender,
 	count(name) as qty_medals
 from olimpiadas_datas_2024.medallists
 where country = 'Brazil'
-group by name, discipline,country_code,gender_upd
-order by count(name) desc
-
-
---Quantidade de medalhas comparada com a quantidade de medalhas olimpíadas anteriores (quantidade e tipo)
-
---############ Total de Medalhas Brasil 2024:
-
-	
-select 
+group by 
+	name, 
+	discipline,
 	country_code,
-	count(medal_type)
-from olimpiadas_datas_2024.medals
---where country_code = 'BRA'
-group by country_code
+	gender
+order by qty_medals desc
 
+
+-- 2) Quantidade de medalhas comparada com a quantidade de medalhas olímpicas anteriores?
 
 --########################## Resultado:
 
+--############ Total de Medalhas 2024 - França:
 
----Medalhas olímpicas anteriores:
-
-
-
-select *
-	from lastolimpiadas_datas.olympic_medals
-
-select *
-from olimpiadas_datas_2024.medals
-
-
-
-
-with medals_lastolimpiadas as (
-	select 
-		country_name,
-		slug_game,
-		count(country_name) over(partition by slug_game) as count_medals_lastolimpiadas
-	from lastolimpiadas_datas.olympic_medals
-	group by 
-		country_name,
-		slug_game
-	order by 
-		country_name
-),
 	
-	medals_olimpiadas as (
-		select 
-			medals.country,
-			slug_game,
-			count(country) as count_medals_olimpiadas2024
-		from olimpiadas_datas_2024.medals
-		group by 
-			medals.country,
-			slug_game
-		order by 
-			medals.country
-	)
-
 select 
-	medals_lastolimpiadas.country_name,
-	medals_lastolimpiadas.slug_game,
-	medals_lastolimpiadas.count_medals_lastolimpiadas,
-	medals_olimpiadas.count_medals_olimpiadas2024,
-	(medals_lastolimpiadas.count_medals_lastolimpiadas/medals_olimpiadas.count_medals_olimpiadas2024) as "difference (%)"
-from medals_lastolimpiadas left join medals_olimpiadas
-	on medals_lastolimpiadas.country_name = medals_olimpiadas.country
-
-
-
-	
--- Com a Olimpiada de 2024 - França:
-
-
-select *
-from olimpiadas_datas_2024.medals_old_and_2024
-order by count_medals_last_olimpiadas desc
-
-
---insert into olimpiadas_datas_2024.medals_old_and_2024
---(slug_game, count_medals_last_olimpiadas)
-
---values
---('french-2024', 20)
-
-
----Medalhas olimpíadas 2024:
-
-
-select
-	count(medal_type) count_medals_2024
+	country_code,
+	count(medal_type) as qty_medals_2024
 from olimpiadas_datas_2024.medals
-where country_code = 'BRA'
+--where country_code = 'BRA'
 group by 
-	medal_date
-order by 
-	medal_date
+	country_code
+order by qty_medals_2024 desc
 
 
----Medalhas olimpíadas 2024 atualizado:
+--############ Total de Medalhas 2020 - Tóquio:
+
+	select
+		country_3_letter_code,
+		count(medal_type) as qty_medals_2020
+	from lastolimpiadas_datas.olympic_medals
+	where slug_game like '%2020'
+	group by country_3_letter_code
+	order by qty_medals_2020 desc
+
+
+---#########GERAL 2020 vs 2024:
+
 
 select 
-	medal_date,
-	sum(count_medals_2024)
-from olimpiadas_datas_2024.medals_2024
-group by medal_date
+	medals.country_code,
+	count(medal_type) as qty_medals_2024,
+	medals_2020_toquio.qty_medals_2020 as Medals_Toquio_2020
+from olimpiadas_datas_2024.medals left join medals_2020_toquio
+	on medals_2020_toquio.country_3_letter_code = medals.country_code
+--where country_code = 'BRA'
+group by 
+	country_code,
+	qty_medals_2020
+order by qty_medals_2024 desc
 
 
---Quais modalidades tivemos mais medalhas em 2024?
+--3) Quais modalidades tivemos mais medalhas em 2024?
+
 
 select 
 	discipline,
-	country_long,
-	country_code,
-	--medal_type,
 	count(medal_type) as qty_medal
 from olimpiadas_datas_2024.medallists
---where country_code
 group by 
-	discipline,
-	country_code,
-	country_long
-	--medal_type
+	discipline
 order by 
-	discipline,
 	qty_medal desc
 
---BRAZIL:
+
+--BRAZIL
+
 
 select 
-	discipline,
 	country_long,
 	country_code,
-	--medal_type,
+	discipline,
 	count(medal_type) as qty_medal
 from olimpiadas_datas_2024.medallists
 where country_long = 'Brazil'
@@ -154,50 +90,166 @@ group by
 	discipline,
 	country_code,
 	country_long
-	--medal_type
 order by 
-	discipline,
 	qty_medal desc
 
 
---Como foi o desempenho do atletas Brasileiros em relação aos dos outros países?
+--BRAZIL - ATHLETES:
+
+
+select 
+	medallists.country_long,
+	medallists.country_code,
+	medallists.discipline,
+	upper(athletes.name),
+	medallists.medal_type,
+	count(medal_type) as qty_medal
+from olimpiadas_datas_2024.medallists
+	join olimpiadas_datas_2024.athletes on athletes.code = medallists.code_athlete
+where medallists.country_long = 'Brazil'
+group by 
+	medallists.discipline,
+	medallists.country_code,
+	athletes.name,
+	medallists.medal_type,
+	medallists.country_long
+order by 
+	medallists.discipline asc,
+	qty_medal desc
+
+
+--4) Como foi o desempenho dos atletas Brasileiros em relação aos dos outros países?
 
 
 select *
 from olimpiadas_datas_2024.athletes
 
 
---############### RESULTADO GERAL:
+select *
+from olimpiadas_datas_2024.medallists
 
 
-select 
-	athletes.code,
-	athletes.name,
-	athletes.gender,
-	athletes.country_long,
-	athletes.disciplines,
-	athletes.nationality_full,
-	athletes.height,
-	athletes.weight,
+----DESEMPENHO OUTROS PAÍSES (ATLETAS):
+
+
+select
+	medallists.nationality,
+	name,
+	(current_date - medallists.birth_date::date)/365 as age,
 	--medallists.medal_type,
+	count(medallists.name)
+from olimpiadas_datas_2024.medallists
+--where country_code = 'BRA'
+group by 
 	medallists.birth_date,
-	count(medal_type)
-from olimpiadas_datas_2024.medallists as medallists 
-	left join olimpiadas_datas_2024.athletes as athletes
-		on medallists.code_athlete = athletes.code
-group by 	
-	athletes.code,
-	athletes.name,
-	athletes.gender,
-	athletes.country_long,
-	athletes.disciplines,
-	athletes.nationality_full,
-	athletes.height,
-	athletes.weight,
+	medallists.nationality,
 	--medallists.medal_type,
-	medallists.birth_date
+	name
 order by 
-	count(medal_type) desc
+	count(medallists.name) desc
+
+
+
+----DESEMPENHO DOS OUTROS PAÍSES:
+
+select
+	medallists.nationality,
+	medallists.discipline,
+	--(current_date - medallists.birth_date::date)/365,
+	--medallists.medal_type,
+	count(medallists.name) as qty_medals
+from olimpiadas_datas_2024.medallists
+where nationality is not null 
+group by 
+	medallists.nationality,
+	medallists.discipline
+order by 
+	medallists.nationality,
+	qty_medals desc
+
+
+----DESEMPENHO BRASILEIRO:
+
+
+select
+	medallists.nationality,
+	medallists.discipline,
+	--(current_date - medallists.birth_date::date)/365,
+	--medallists.medal_type,
+	count(medallists.name) as qty_medals
+from olimpiadas_datas_2024.medallists
+where nationality = 'Brazil' 
+group by 
+	--medallists.birth_date,
+	medallists.nationality,
+	medallists.discipline
+	--medallists.medal_type,
+	--name
+order by 
+	medallists.nationality,
+	qty_medals desc
+
+
+----DESEMPENHO BRASILEIRO (ATLETAS):
+
+
+select
+	name,
+	(current_date - medallists.birth_date::date)/365 as age,
+	--medallists.medal_type,
+	count(medallists.name)
+from olimpiadas_datas_2024.medallists
+where country_code = 'BRA'
+group by 
+	medallists.birth_date,
+	--medallists.medal_type,
+	name
+order by 
+	age asc,
+	count(medallists.name) desc
+
+
+----#############Quantidade de "Female" nas modalidades (proporção)
+
+
+		select 
+			distinct athletes.disciplines,
+			athletes.country,
+			--athletes.name,
+			--athletes.country,
+			count(athletes.name) over (partition by athletes.country ) as sex_per_country,
+			count(athletes.name) over (partition by athletes.disciplines ) as sex_per_discilplines
+		from olimpiadas_datas_2024.athletes as athletes
+		where athletes.country_long != 'Brazil' and athletes.gender = 'Female'
+		group by 	
+			--athletes.gender,
+			athletes.name,
+
+			athletes.disciplines,
+			athletes.country
+		order by 
+			sex_per_discilplines desc
+
+	
+	--#############Quantidade de "Male" nas modalidades (proporção)
+
+
+	select 
+		distinct athletes.disciplines,
+		--athletes.name,
+		athletes.country,
+		count(athletes.name) over (partition by athletes.country ) as sex_per_country,	
+		count(athletes.name) over (partition by athletes.disciplines) as sex_discilplines
+	from olimpiadas_datas_2024.athletes as athletes
+	where athletes.country_long != 'Brazil' and athletes.gender = 'Male'
+	group by 	
+		--athletes.gender,
+		athletes.name,
+		athletes.country,
+		athletes.disciplines
+	order by 
+		sex_discilplines desc
+		
 	
 
 --############### RESULTADO BRASILEIRO:
@@ -207,7 +259,7 @@ select
 	athletes.code,
 	athletes.name,
 	athletes.gender,
-	athletes.country_long,
+	athletes.country,
 	athletes.disciplines,
 	--medallists.medal_type,
 	count(medal_type),
@@ -220,8 +272,47 @@ group by
 	athletes.code,
 	athletes.name,
 	athletes.gender,
-	athletes.country_long,
+	athletes.country,
 	athletes.disciplines,
 	medallists.medal_type
 order by 
+	disciplines asc,
 	count(medal_type) desc
+
+	
+	--#############Quantidade de "Female" nas modalidades (proporção)
+	
+	
+	select 
+		distinct athletes.disciplines,
+		--athletes.name,
+		--athletes.country,
+		count(athletes.name) over (partition by athletes.disciplines) as sex_discilplines
+	from olimpiadas_datas_2024.athletes as athletes
+	where athletes.country_long = 'Brazil' and athletes.gender = 'Female'
+	group by 	
+		--athletes.gender,
+		athletes.name,
+		--athletes.country,
+		athletes.disciplines
+	order by 
+		sex_discilplines desc
+
+	
+	--#############Quantidade de "Male" nas modalidades (proporção)
+	
+	
+	select 
+		distinct athletes.disciplines,
+		--athletes.name,
+		--athletes.country,
+		count(athletes.name) over (partition by athletes.disciplines) as sex_discilplines
+	from olimpiadas_datas_2024.athletes as athletes
+	where athletes.country_long = 'Brazil' and athletes.gender = 'Male' 
+	group by 	
+		--athletes.gender,
+		athletes.name,
+		--athletes.country,
+		athletes.disciplines
+	order by 
+		sex_discilplines desc
