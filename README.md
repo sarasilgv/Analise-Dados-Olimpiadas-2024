@@ -22,9 +22,9 @@ Com essa base de dados possui vários detalhes sobre os jogos, atletas, medalhas
 |schedule_preliminary.csv|Agendas preliminares dos eventos               |
 |teams.csv              | Todos as equipes                               |
 |technical_officials.csv| Técnicos oficiais (juízes, membros do juri)    |
-|results	        | Pasta que contem tabelas com resultados dos eventos por modalidade|
 |torch_route..csv       | Rotas da tocha olímpica                         |
 |venues.csv             | Locais de competição                            |
+|results	        	| Pasta que contem as tabelas com os resultados de todos os eventos|
 
 
 
@@ -41,120 +41,215 @@ Com essa base de dados possui vários detalhes sobre os jogos, atletas, medalhas
 - Quais são as modalidades que possuem maior presença Feminina e Masculina?
 
 
-## 📊 Soluções:
+## 📊 Soluções: (Para consultar os resultados acessar a pasta results)
 
 
-1. Qual foi o desempenho brasileiro nos esportes que ganharam medalhas?
+### 1. Qual foi o desempenho brasileiro nos esportes que ganharam medalhas? 
+
+#### Resultado_01.xlsx
 
 
     select 
         country_code,
-        name,
+		name,
         discipline,
-        case 
-            when gender = 'M' then 'Men'
-            else 'Women'
-            end as gender,
-        count(name) as qty_medals
-    from olimpiadas_datas_2024.medallists
-    where country = 'Brazil'
+	   	case 
+	   	when gender = 'M' then 'Men'
+       	else 'Women'
+       	end as gender,
+       	count(name) as qty_medals
+	from olimpiadas_datas_2024.medallists
+	where country = 'Brazil'
     group by 
-        name, 
+	    name, 
         discipline,
         country_code,
-        gender
-    order by qty_medals desc
-
-country_code	name	discipline	gender	qty_medals
-BRA	ANDRADE Rebeca	Artistic Gymnastics	Women	4
-BRA	PIMENTA Larissa	Judo	Women	2
-BRA	SOUZA Beatriz	Judo	Women	2
-BRA	LIMA Willian	Judo	Women	2
-BRA	TAINA	Football	Women	1
-BRA	SCHIMIDT Guilherme	Judo	Women	1
-BRA	MACEDO Rafael	Judo	Women	1
-BRA	BONFIM Caio	Athletics	Women	1
-BRA	MEDINA Gabriel	Surfing	Women	1
-BRA	YASMIM	Football	Women	1
-BRA	CARGNIN Daniel	Judo	Women	1
-BRA	AKIO Augusto	Skateboarding	Women	1
-BRA	WESTON-WEBB Tatiana	Surfing	Women	1
-BRA	LUCIANA	Football	Women	1
-BRA	VITORIA YAYA	Football	Women	1
-BRA	DAHER de MENEZES Thaisa	Volleyball	Women	1
-BRA	BARBOSA Jade	Artistic Gymnastics	Women	1
-BRA	ANA VITORIA	Football	Women	1
-BRA	LEAL Rayssa	Skateboarding	Women	1
-BRA	GONCALVES Leonardo	Judo	Women	1
-BRA	RAFAELLE	Football	Women	1
-BRA	SILVA RAMOS Ana Patricia	Beach Volleyball	Women	1
-BRA	DUARTE ALECRIM Diana	Volleyball	Women	1
-BRA	THAIS	Football	Women	1
-BRA	SANTOS LISBOA Eduarda	Beach Volleyball	Women	1
-BRA	MARTA	Football	Women	1
-BRA	DUDA SAMPAIO	Football	Women	1
-BRA	ANTONIA	Football	Women	1
-BRA	SOARES FERREIRA Beatriz Iasmin	Boxing	Women	1
-BRA	da SILVA Ana Carolina	Volleyball	Women	1
-BRA	RATZKE Roberta Silva	Volleyball	Women	1
-BRA	QUADROS Ketleyn	Judo	Women	1
-BRA	OLIVEIRA Lorrane	Artistic Gymnastics	Women	1
-BRA	KEROLIN	Football	Women	1
-BRA	LUDMILA	Football	Women	1
-BRA	BRAGA GUIMARAES Gabriela	Volleyball	Women	1
-BRA	MENEZES OLIVEIRA de SOUZA Ana Cris	Volleyball	Women	1
-BRA	SARAIVA Flavia	Artistic Gymnastics	Women	1
-BRA	ALEXANDRE COSTA NUNES Nyeme Victor	Volleyball	Women	1
-BRA	QUEIROZ Isaquias	Canoe Sprint	Women	1
-BRA	ANGELINA	Football	Women	1
-BRA	GABI PORTILHO	Football	Women	1
-BRA	SILVA Rafael	Judo	Women	1
-BRA	PONTES Edival	Taekwondo	Women	1
-BRA	PRISCILA	Football	Women	1
-BRA	SOARES Julia	Artistic Gymnastics	Women	1
-BRA	dos SANTOS Alison	Athletics	Women	1
-BRA	ARAUJO Natalia	Volleyball	Women	1
-BRA	JHENIFFER	Football	Women	1
-BRA	ADRIANA	Football	Women	1
-BRA	LORENA	Football	Women	1
-BRA	GABI NUNES	Football	Women	1
-BRA	TARCIANE	Football	Women	1
-BRA	MONTIBELLER Rosamaria	Volleyball	Women	1
-BRA	SILVA Rafaela	Judo	Women	1
-BRA	BERGMANN Julia Isabelle	Volleyball	Women	1
-BRA	TAMIRES	Football	Women	1
-BRA	LEMES SANTOS Tainara	Volleyball	Women	1
-BRA	GERALDO TEIXEIRA Lorenne	Volleyball	Women	1
-BRA	LAUREN	Football	Women	1
-BRA	SILVA CARNEIRO Macris Fernanda	Volleyball	Women	1
+		gender
+    order by
+        qty_medals desc
 
 
-2. Qual foi a quantidade de medalhas comparada com a quantidade de medalhas olimpíadas anteriores? (França 2024 vs Tóquio 2020)
+### 2. Qual foi a quantidade de medalhas comparada com a quantidade de medalhas olimpíadas anteriores? (França 2024 vs Tóquio 2020)
+
+#### Resultado_02.xlsx
+
+	select 
+		medals.country_code as country,
+		count(medal_type) as qty_medals_2024,
+		medals_2020_toquio.qty_medals_2020 as qty_medals_2020
+	from olimpiadas_datas_2024.medals left join medals_2020_toquio
+		on medals_2020_toquio.country_3_letter_code = medals.country_code
+	group by 
+		country_code,
+		qty_medals_2020
+	order by qty_medals_2024 desc
 
 
-3. Quais modalidades tivemos mais medalhas em 2024?
+
+### 3. Quais modalidades tivemos mais medalhas em 2024?
+
+#### Resultado_03_geral.xlsx
+
+	select 
+		discipline as modality,
+		count(medal_type) as qty_medals_2024
+	from olimpiadas_datas_2024.medallists
+	group by 
+		discipline
+	order by 
+		qty_medals_2024 desc
 
 
-4. Como foi o desempenho dos atletas Brasileiros em relação aos dos outros países?
+#### Resultado_03_Brasil.xlsx
 
 
-5. Quais são as modalidades que possuem maior presença Feminina e Masculina?
+	select 
+		country_long as country_name,
+		country_code as country,
+		discipline as modality,
+		count(medal_type) as qty_medals_2024
+	from olimpiadas_datas_2024.medallists
+	where country_long = 'Brazil'
+	group by 
+		discipline,
+		country_code,
+		country_long
+	order by 
+		qty_medals_2024 desc
 
+
+#### Resultado_03_Brasil_atletas.xlsx
+
+
+	select 
+		medallists.country_long as country_name,
+		medallists.country_code as country,
+		medallists.discipline as modality,
+		upper(athletes.name) as name,
+		medallists.medal_type,
+		count(medal_type) as qty_medals
+	from olimpiadas_datas_2024.medallists
+		join olimpiadas_datas_2024.athletes on athletes.code = medallists.code_athlete
+	where medallists.country_long = 'Brazil'
+	group by 
+		medallists.discipline,
+		medallists.country_code,
+		athletes.name,
+		medallists.medal_type,
+		medallists.country_long
+	order by 
+		medallists.discipline asc,
+		qty_medals desc
+
+
+
+### 4. Como foi o desempenho dos atletas Brasileiros em relação aos dos outros países?
+
+#### Results_04_Brasil_atletas.xlsx
+
+	select
+		name,
+		medallists.nationality,
+		medallists.discipline as modality,
+		(current_date - medallists.birth_date::date)/365 as age,
+		count(medallists.name) as qty_medals
+	from olimpiadas_datas_2024.medallists
+	where country_code = 'BRA'
+	--where nationality is not null 
+	group by 
+		medallists.birth_date,
+		medallists.nationality,
+		medallists.discipline,
+		name
+	order by 
+		nationality,
+		modality,
+		age,
+		count(medallists.name) desc
+
+
+### 5. Quais são as modalidades que possuem maior presença Feminina e Masculina?
+
+#### MULHERES - Resultado_05_modalidades_mulheres
+
+	select 
+		distinct athletes.disciplines as modality,
+		athletes.country as nationality,
+		count(athletes.name) over (partition by athletes.country, athletes.disciplines) as qty_womens
+	from olimpiadas_datas_2024.athletes as athletes
+	where athletes.country_long != 'Brazil' and athletes.gender = 'Female' and athletes.country is not null
+	group by 	
+		athletes.name,
+		athletes.disciplines,
+		athletes.country
+	order by 
+		qty_womens desc,
+		nationality asc
+
+
+#### HOMENS - Resultado_05_modalidades_homens
+
+
+	select 
+		distinct athletes.disciplines as modality,
+		athletes.country as nationality,
+		count(athletes.name) over (partition by athletes.country, athletes.disciplines) as qty_mens
+	from olimpiadas_datas_2024.athletes as athletes
+	where athletes.country_long != 'Brazil' and athletes.gender = 'Male' and athletes.country is not null
+	group by 	
+		athletes.name,
+		athletes.disciplines,
+		athletes.country
+	order by 
+		qty_mens desc,
+		nationality asc
+
+
+#### MULHERES (Brazil) - Resultado_05_modalidades_mulheres_Brasil
+	
+	
+	select 
+		distinct athletes.disciplines as modality,
+		count(athletes.name) over (partition by athletes.disciplines) as qty_womens
+	from olimpiadas_datas_2024.athletes as athletes
+	where athletes.country_long = 'Brazil' and athletes.gender = 'Female'
+	group by 	
+		athletes.name,
+		athletes.disciplines
+	order by 
+		qty_womens desc
+
+
+#### HOMENS (Brazil) - Resultado_05_modalidades_homens_Brasil
+	
+	
+	select 
+		distinct athletes.disciplines as modality,
+		count(athletes.name) over (partition by athletes.disciplines) as qty_mens
+	from olimpiadas_datas_2024.athletes as athletes
+	where athletes.country_long = 'Brazil' and athletes.gender = 'Male' 
+	group by 	
+		athletes.name,
+		athletes.disciplines
+	order by 
+		qty_mens desc
 
 
 ## 🔎 Análises Complementares:
 
-A análise revelou que o Brasil teve um desempenho superior em 2024, conquistando mais medalhas do que em Tóquio 2020.
+- A análise revelou que o Brasil teve um desempenho superior em 2024, conquistando mais medalhas do que em Tóquio 2020.
 
-As modalidades com mais medalhas foram Atletismo e Natação, enquanto o Skate destacou-se entre os atletas mais jovens.
+- A atleta  Rebeca Andrade consquistou 4 medalahas na modalidade Ginástica Artistica, sendo 2 de Prata, 1 de ouro e 1 de Bronze.
 
-Houve equilíbrio entre a presença feminina e masculina em diversas modalidades, evidenciando maior diversidade.
+- As modalidades em que os Brasileiros se destacaram foram o Futebol e Judo, enquanto os demais países foram	231 no Atletismo
+e 219 na Natação.
+
+- Houve equilíbrio entre a presença feminina e masculina em diversas modalidades, evidenciando maior diversidade.
 
 
 ## 🚀 Tecnologias Utilizadas:
 
-SQL para consultas e análises.
-
+SQL e Excel para consultas e análises.
 
 
 #### Conecte-se comigo
