@@ -235,7 +235,7 @@ Com essa base de dados possui vários detalhes sobre os jogos, atletas, medalhas
 		qty_mens desc
 
 
-## 🔎 Análises Complementares:
+## 🔎 Resultado das Análises:
 
 - A análise revelou que o Brasil teve um desempenho superior em 2024, conquistando mais medalhas do que em Tóquio 2020.
 
